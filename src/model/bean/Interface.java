@@ -49,6 +49,7 @@ public class Interface extends javax.swing.JFrame {
         enddao.getBairros(jComboBoxBairros);
         resultadoPesquisa = (DefaultTableModel) jTableResultados.getModel();
     }
+   
     
     public void atualizarEstatisticas(){
         int tf = estdao.numPessoas();
@@ -226,7 +227,7 @@ public class Interface extends javax.swing.JFrame {
         endereco = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        jTextFieldBairro = new javax.swing.JTextField();
         data = new javax.swing.JPanel();
         jTextField4 = new javax.swing.JTextField();
         jTextField5 = new javax.swing.JTextField();
@@ -1382,13 +1383,13 @@ public class Interface extends javax.swing.JFrame {
         jTextField2.setForeground(new java.awt.Color(102, 102, 102));
         jTextField2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Número", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(102, 102, 102))); // NOI18N
 
-        jTextField3.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.background"));
-        jTextField3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jTextField3.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Bairro", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(102, 102, 102))); // NOI18N
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+        jTextFieldBairro.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.background"));
+        jTextFieldBairro.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jTextFieldBairro.setForeground(new java.awt.Color(102, 102, 102));
+        jTextFieldBairro.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Bairro", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(102, 102, 102))); // NOI18N
+        jTextFieldBairro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
+                jTextFieldBairroActionPerformed(evt);
             }
         });
 
@@ -1401,7 +1402,7 @@ public class Interface extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jTextFieldBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         enderecoLayout.setVerticalGroup(
             enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1409,7 +1410,7 @@ public class Interface extends javax.swing.JFrame {
                 .addGroup(enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldBairro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -1579,6 +1580,11 @@ public class Interface extends javax.swing.JFrame {
 
         jButton5.setForeground(new java.awt.Color(102, 102, 102));
         jButton5.setText("Pesquisar");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jTableResultados.setForeground(new java.awt.Color(51, 51, 51));
         jTableResultados.setModel(new javax.swing.table.DefaultTableModel(
@@ -1586,14 +1592,14 @@ public class Interface extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nome", "Endereço", "Data", "Questionários"
+                "Nome", "Rua", "Número", "Bairro", "Questionários", "ID"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, true, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1615,6 +1621,11 @@ public class Interface extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(jTableResultados);
+        if (jTableResultados.getColumnModel().getColumnCount() > 0) {
+            jTableResultados.getColumnModel().getColumn(5).setMinWidth(0);
+            jTableResultados.getColumnModel().getColumn(5).setPreferredWidth(0);
+            jTableResultados.getColumnModel().getColumn(5).setMaxWidth(0);
+        }
 
         jButton6.setForeground(new java.awt.Color(51, 51, 51));
         jButton6.setText("Visualizar");
@@ -1944,9 +1955,9 @@ public class Interface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jLabel14MouseClicked
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+    private void jTextFieldBairroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldBairroActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    }//GEN-LAST:event_jTextFieldBairroActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
@@ -2121,6 +2132,11 @@ public class Interface extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jTableResultadosVetoableChange
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        pdao.pesquisar(jTextFieldBairro.getText(), resultadoPesquisa);
+    }//GEN-LAST:event_jButton5ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -2260,10 +2276,10 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JTable jTableResultados;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
+    private javax.swing.JTextField jTextFieldBairro;
     private javax.swing.JLabel p1p2;
     private javax.swing.JLabel p2p1;
     private javax.swing.JLabel p2p2;

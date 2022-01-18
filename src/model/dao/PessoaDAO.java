@@ -23,21 +23,6 @@ public class PessoaDAO {
     ResultSet rs = null;
     QuestionarioDAO qdao = new QuestionarioDAO();
 
-    public void getResultados(DefaultTableModel tabela){
-        tabela.setRowCount(0);
-        conexao = ConnectionFactory.conector();
-        String sql = "select idpessoas, nome, numero, rua, bairro, datapergunta, count(idperguntas) as Qtd from tbl_pessoas, tbl_perguntas where idpessoas = idperguntas group by idpessoas";
-        try {
-            pst = conexao.prepareStatement(sql);
-            rs = pst.executeQuery();
-            while(rs.next()){
-                tabela.addRow(new Object[] {rs.getString(2),rs.getString(4)+", "+rs.getString(3)+" - "+rs.getString(5),rs.getString(6),rs.getInt(7)});
-            }
-        }catch (Exception e) {
-            
-        }
-    }
-    
     public Pessoa getPessoa(int id){
         conexao = ConnectionFactory.conector();
         String sql = "select * from tbl_pessoas where idpessoas = "+id;
@@ -48,6 +33,51 @@ public class PessoaDAO {
             return new Pessoa(id, rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(2), qdao.getQuestionario(id));
         } catch (Exception e) {
             return null;
+        }
+    }
+    
+    public void pesquisar(String bairro, DefaultTableModel tabela){
+        tabela.setRowCount(0);
+        conexao = ConnectionFactory.conector();
+        String sql = "select * from tbl_pessoas where bairro = ?";
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, bairro);
+            rs = pst.executeQuery();
+            while(rs.next()){
+                tabela.addRow(new Object[] {
+                    getPessoa(rs.getInt(1)).getNome(),
+                    getPessoa(rs.getInt(1)).getRua(),
+                    getPessoa(rs.getInt(1)).getNumero(),
+                    getPessoa(rs.getInt(1)).getBairro(),
+                    getPessoa(rs.getInt(1)).getQuestionario().size(),
+                    getPessoa(rs.getInt(1)).getId()
+                });
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    
+    public void getResultados(DefaultTableModel tabela){
+        tabela.setRowCount(0);
+        conexao = ConnectionFactory.conector();
+        String sql = "select nome, rua, numero, bairro, count(idperguntas) as Qtd, idpessoas from tbl_pessoas, tbl_perguntas where idpessoas = idperguntas group by idpessoas";
+        try {
+            pst = conexao.prepareStatement(sql);
+            rs = pst.executeQuery();
+            while(rs.next()){
+                tabela.addRow(new Object[] {
+                    rs.getString(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getString(4),
+                    rs.getInt(5),
+                    rs.getInt(6)
+                });
+            }
+        }catch (Exception e) {
+            System.out.println("erro");
         }
     }
 }

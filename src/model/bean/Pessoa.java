@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author Matheus
  */
 public class Pessoa {
-    private int id, numQuestionarios;
+    private int id;
     private String  nome , rua , bairro, numero;
     private ArrayList<Questionario> questionario;
 

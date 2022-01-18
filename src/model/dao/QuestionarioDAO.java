@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import model.bean.Animal;
 import model.bean.Questionario;
 
 /**
@@ -26,7 +25,7 @@ public class QuestionarioDAO {
     public ArrayList<Questionario> getQuestionario(int id){
         ArrayList<Questionario> questionarios = new ArrayList<Questionario>();
         conexao = ConnectionFactory.conector();
-        String sql = "select * from tbl_perguntas where idanimais = "+id;
+        String sql = "select * from tbl_perguntas where idperguntas = "+id;
         try {
             pst = conexao.prepareStatement(sql);
             rs = pst.executeQuery();
@@ -38,4 +37,5 @@ public class QuestionarioDAO {
             return null;
         }
     }
+
 }

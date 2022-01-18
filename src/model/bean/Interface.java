@@ -17,8 +17,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import model.dao.AnimalDAO;
 import model.dao.EstatisticaDAO;
 import model.dao.PessoaDAO;
+import model.dao.QuestionarioDAO;
 
 
 /**
@@ -33,6 +35,8 @@ public class Interface extends javax.swing.JFrame {
     EstatisticaDAO estdao = new EstatisticaDAO();
     EnderecoDAO enddao = new EnderecoDAO();
     PessoaDAO pdao = new PessoaDAO();
+    AnimalDAO adao = new AnimalDAO();
+    QuestionarioDAO qdao = new QuestionarioDAO();
 
     DefaultTableModel resultadoPesquisa;
     

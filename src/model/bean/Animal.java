@@ -11,14 +11,23 @@ import java.util.Date;
  *
  * @author Matheus
  */
-public class Animais {
+public class Animal {
     private String especie;
     private int quantidade;
+    private Date data;
 
-    public Animais(String especie, int quantidade, Date data) {
+    public Animal(String especie, int quantidade, Date data) {
+        this.especie = especie;
+        this.quantidade = quantidade;
+        this.data = data;
+    }
+
+    public Animal(String especie, int quantidade) {
         this.especie = especie;
         this.quantidade = quantidade;
     }
+    
+    
 
     public String getEspecie() {
         return especie;
@@ -35,5 +44,14 @@ public class Animais {
     public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
+    }
+    
     
 }

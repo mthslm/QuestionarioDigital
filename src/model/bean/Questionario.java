@@ -16,9 +16,9 @@ public class Questionario {
     private boolean cisterna , cisternaconsumo , cxdagua , tampada , pcartesiano , pococonsumo , fseptica , animal;
     private int capacidade;
     private Date data;
-    private ArrayList<Animais> animais;
+    private ArrayList<Animal> animais;
 
-    public Questionario(boolean cisterna, boolean cisternaconsumo, boolean cxdagua, boolean tampada, boolean pcartesiano, boolean pococonsumo, boolean fseptica, boolean animal, int capacidade, Date data, ArrayList<Animais> animais) {
+    public Questionario(boolean cisterna, boolean cisternaconsumo, boolean cxdagua, boolean tampada, boolean pcartesiano, boolean pococonsumo, boolean fseptica, boolean animal, int capacidade, Date data, ArrayList<Animal> animais) {
         this.cisterna = cisterna;
         this.cisternaconsumo = cisternaconsumo;
         this.cxdagua = cxdagua;
@@ -112,11 +112,11 @@ public class Questionario {
         this.data = data;
     }
 
-    public ArrayList<Animais> getAnimais() {
+    public ArrayList<Animal> getAnimais() {
         return animais;
     }
 
-    public void setAnimais(ArrayList<Animais> animais) {
+    public void setAnimais(ArrayList<Animal> animais) {
         this.animais = animais;
     }
 

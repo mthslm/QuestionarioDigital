@@ -21,6 +21,7 @@ public class PessoaDAO {
     Connection conexao = null;
     PreparedStatement pst = null;
     ResultSet rs = null;
+    QuestionarioDAO qdao = new QuestionarioDAO();
 
     public void getResultados(DefaultTableModel tabela){
         tabela.setRowCount(0);
@@ -30,11 +31,23 @@ public class PessoaDAO {
             pst = conexao.prepareStatement(sql);
             rs = pst.executeQuery();
             while(rs.next()){
-                
                 tabela.addRow(new Object[] {rs.getString(2),rs.getString(4)+", "+rs.getString(3)+" - "+rs.getString(5),rs.getString(6),rs.getInt(7)});
             }
         }catch (Exception e) {
             
+        }
+    }
+    
+    public Pessoa getPessoa(int id){
+        conexao = ConnectionFactory.conector();
+        String sql = "select * from tbl_pessoas where idpessoas = "+id;
+        try {
+            pst = conexao.prepareStatement(sql);
+            rs = pst.executeQuery();
+            rs.next();
+            return new Pessoa(id, rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(2), qdao.getQuestionario(id));
+        } catch (Exception e) {
+            return null;
         }
     }
 }

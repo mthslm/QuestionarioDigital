@@ -18,11 +18,11 @@ import model.bean.Animal;
  * @author Matheus
  */
 public class AnimalDAO {
-    Connection conexao = null;
-    PreparedStatement pst = null;
-    ResultSet rs = null;
-    
-    public ArrayList<Animal> getAnimal(int id){
+
+    public ArrayList<Animal> getAnimal(int id) {
+        Connection conexao = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
         ArrayList<Animal> animais = new ArrayList<Animal>();
         conexao = ConnectionFactory.conector();
         String sql = "select * from tbl_animais where idanimais = "+id;
@@ -32,6 +32,9 @@ public class AnimalDAO {
             while(rs.next()){
                 animais.add(new Animal(rs.getString(2), rs.getInt(3), rs.getDate(4)));
             }
+            rs.close();
+            pst.close();
+            conexao.close();
             return animais;
         } catch (Exception e) {
             return null;

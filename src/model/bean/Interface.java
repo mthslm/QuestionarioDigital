@@ -11,6 +11,7 @@ import java.awt.Desktop;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.net.URI;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -2118,8 +2119,9 @@ public class Interface extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
-        pdao.getResultados(resultadoPesquisa);
-                jLabelNResultados.setText(resultadoPesquisa.getRowCount()+"");
+        pdao.getAllResultados(resultadoPesquisa);
+        jLabelNResultados.setText(resultadoPesquisa.getRowCount() + "");
+        
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jTableResultadosPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jTableResultadosPropertyChange
@@ -2134,7 +2136,7 @@ public class Interface extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        pdao.pesquisar(jTextFieldBairro.getText(), resultadoPesquisa);
+        pdao.getResultadosBairro(resultadoPesquisa,jTextFieldBairro.getText());
     }//GEN-LAST:event_jButton5ActionPerformed
 
     /**

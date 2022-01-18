@@ -16,7 +16,9 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 import model.dao.EstatisticaDAO;
+import model.dao.PessoaDAO;
 
 
 /**
@@ -30,7 +32,9 @@ public class Interface extends javax.swing.JFrame {
     int numPessoas;
     EstatisticaDAO estdao = new EstatisticaDAO();
     EnderecoDAO enddao = new EnderecoDAO();
+    PessoaDAO pdao = new PessoaDAO();
 
+    DefaultTableModel resultadoPesquisa;
     
     public Interface() {
         initComponents();
@@ -39,6 +43,7 @@ public class Interface extends javax.swing.JFrame {
         atualizarEstatisticas();
         enddao.getBairros(jComboBoxBairros);
         enddao.getBairros(jComboBoxBairros);
+        resultadoPesquisa = (DefaultTableModel) jTableResultados.getModel();
     }
     
     public void atualizarEstatisticas(){
@@ -235,9 +240,9 @@ public class Interface extends javax.swing.JFrame {
         pesquisarPor = new javax.swing.JComboBox<>();
         jButton5 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableResultados = new javax.swing.JTable();
         jButton6 = new javax.swing.JButton();
-        jLabel20 = new javax.swing.JLabel();
+        jLabelNResultados = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jButton7 = new javax.swing.JButton();
@@ -1571,8 +1576,8 @@ public class Interface extends javax.swing.JFrame {
         jButton5.setForeground(new java.awt.Color(102, 102, 102));
         jButton5.setText("Pesquisar");
 
-        jTable1.setForeground(new java.awt.Color(51, 51, 51));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableResultados.setForeground(new java.awt.Color(51, 51, 51));
+        jTableResultados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -1583,25 +1588,47 @@ public class Interface extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
-        jScrollPane2.setViewportView(jTable1);
+        jTableResultados.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jTableResultadosPropertyChange(evt);
+            }
+        });
+        jTableResultados.addVetoableChangeListener(new java.beans.VetoableChangeListener() {
+            public void vetoableChange(java.beans.PropertyChangeEvent evt)throws java.beans.PropertyVetoException {
+                jTableResultadosVetoableChange(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jTableResultados);
 
         jButton6.setForeground(new java.awt.Color(51, 51, 51));
         jButton6.setText("Visualizar");
 
-        jLabel20.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel20.setText("0");
+        jLabelNResultados.setForeground(new java.awt.Color(102, 102, 102));
+        jLabelNResultados.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabelNResultados.setText("0");
 
         jLabel21.setForeground(new java.awt.Color(102, 102, 102));
         jLabel21.setText("resultados encontrados");
 
         jButton7.setForeground(new java.awt.Color(102, 102, 102));
         jButton7.setText("Listar todos");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         jButton8.setForeground(new java.awt.Color(102, 102, 102));
         jButton8.setText("Limpar");
@@ -1628,7 +1655,7 @@ public class Interface extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(buscarLayout.createSequentialGroup()
-                        .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabelNResultados, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel21)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1659,7 +1686,7 @@ public class Interface extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton6))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel20)
+                        .addComponent(jLabelNResultados)
                         .addComponent(jLabel21)))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
@@ -2074,6 +2101,22 @@ public class Interface extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jComboBoxRuasMouseEntered
 
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        pdao.getResultados(resultadoPesquisa);
+                jLabelNResultados.setText(resultadoPesquisa.getRowCount()+"");
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jTableResultadosPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jTableResultadosPropertyChange
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jTableResultadosPropertyChange
+
+    private void jTableResultadosVetoableChange(java.beans.PropertyChangeEvent evt)throws java.beans.PropertyVetoException {//GEN-FIRST:event_jTableResultadosVetoableChange
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jTableResultadosVetoableChange
+
     /**
      * @param args the command line arguments
      */
@@ -2157,7 +2200,6 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
@@ -2181,6 +2223,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelNResultados;
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -2210,7 +2253,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableResultados;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;

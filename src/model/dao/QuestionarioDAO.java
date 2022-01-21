@@ -31,7 +31,7 @@ public class QuestionarioDAO {
             pst = conexao.prepareStatement(sql);
             rs = pst.executeQuery();
             while (rs.next()) {
-                questionarios.add(new Questionario(rs.getBoolean(2), rs.getBoolean(3), rs.getBoolean(4), rs.getBoolean(5), rs.getBoolean(6), rs.getBoolean(7), rs.getBoolean(8), rs.getBoolean(9), rs.getInt(10), rs.getDate(11), adao.getAnimal(id)));
+                questionarios.add(new Questionario(rs.getBoolean(2), rs.getBoolean(3), rs.getBoolean(4), rs.getBoolean(5), rs.getBoolean(6), rs.getBoolean(7), rs.getBoolean(8), rs.getBoolean(9), rs.getInt(10), rs.getDate(11), adao.getAnimal(id,rs.getDate(11))));
             }
             rs.close();
             pst.close();

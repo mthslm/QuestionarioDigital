@@ -19,13 +19,13 @@ import model.bean.Animal;
  */
 public class AnimalDAO {
 
-    public ArrayList<Animal> getAnimal(int id) {
+    public ArrayList<Animal> getAnimal(int id, Date data) {
         Connection conexao = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
         ArrayList<Animal> animais = new ArrayList<Animal>();
         conexao = ConnectionFactory.conector();
-        String sql = "select * from tbl_animais where idanimais = "+id;
+        String sql = "select * from tbl_animais where idanimais = "+id+" and dataanimais = '"+data+"'";
         try {
             pst = conexao.prepareStatement(sql);
             rs = pst.executeQuery();

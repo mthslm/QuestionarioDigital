@@ -52,7 +52,7 @@ public class EnderecoDAO {
                 rua.addItem(rs.getString(1));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(EnderecoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("erro");
         }
     }
 }

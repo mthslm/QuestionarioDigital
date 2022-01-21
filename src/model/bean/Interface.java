@@ -100,16 +100,16 @@ public class Interface extends javax.swing.JFrame {
     }
     
     public void desmarcarPesquisa(JCheckBox campo){
-        if(campo!=jCisterna)
-            jCisterna.setSelected(false);
-        if(campo!=jCaixa)
-            jCaixa.setSelected(false);
-        if(campo!=jPoco)
-            jPoco.setSelected(false);
-        if(campo!=jFossa)
-            jFossa.setSelected(false);
-        if(campo!=jAnimal)
-            jAnimal.setSelected(false);
+        if(campo!=cisterna)
+            cisterna.setSelected(false);
+        if(campo!=cxdagua)
+            cxdagua.setSelected(false);
+        if(campo!=poco)
+            poco.setSelected(false);
+        if(campo!=fossa)
+            fossa.setSelected(false);
+        if(campo!=animais)
+            animais.setSelected(false);
     }
 
 
@@ -226,22 +226,24 @@ public class Interface extends javax.swing.JFrame {
         buscar = new javax.swing.JPanel();
         pesquisa = new javax.swing.JPanel();
         endereco = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextFieldBairro = new javax.swing.JTextField();
+        numero = new javax.swing.JTextField();
+        bairroCheckBox = new javax.swing.JCheckBox();
+        bairro = new javax.swing.JComboBox<>();
+        rua = new javax.swing.JComboBox<>();
+        ruaCheckBox = new javax.swing.JCheckBox();
         data = new javax.swing.JPanel();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
         jLabel22 = new javax.swing.JLabel();
+        data1 = new com.toedter.calendar.JDateChooser();
+        data2 = new com.toedter.calendar.JDateChooser();
         animal = new javax.swing.JPanel();
         jLabel23 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        especie = new javax.swing.JTextField();
         questionario = new javax.swing.JPanel();
-        jCisterna = new javax.swing.JCheckBox();
-        jCaixa = new javax.swing.JCheckBox();
-        jAnimal = new javax.swing.JCheckBox();
-        jFossa = new javax.swing.JCheckBox();
-        jPoco = new javax.swing.JCheckBox();
+        cisterna = new javax.swing.JCheckBox();
+        cxdagua = new javax.swing.JCheckBox();
+        animais = new javax.swing.JCheckBox();
+        fossa = new javax.swing.JCheckBox();
+        poco = new javax.swing.JCheckBox();
         jLabel3 = new javax.swing.JLabel();
         pesquisarPor = new javax.swing.JComboBox<>();
         jButton5 = new javax.swing.JButton();
@@ -1368,29 +1370,22 @@ public class Interface extends javax.swing.JFrame {
 
         pesquisa.setLayout(new java.awt.CardLayout());
 
-        jTextField1.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.background"));
-        jTextField1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jTextField1.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Rua", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(102, 102, 102))); // NOI18N
-        jTextField1.setCaretColor(new java.awt.Color(102, 102, 102));
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        numero.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.background"));
+        numero.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        numero.setForeground(new java.awt.Color(102, 102, 102));
+        numero.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Número", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(102, 102, 102))); // NOI18N
+
+        bairroCheckBox.setText("Bairro");
+        bairroCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                bairroCheckBoxActionPerformed(evt);
             }
         });
 
-        jTextField2.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.background"));
-        jTextField2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jTextField2.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Número", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(102, 102, 102))); // NOI18N
-
-        jTextFieldBairro.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.background"));
-        jTextFieldBairro.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jTextFieldBairro.setForeground(new java.awt.Color(102, 102, 102));
-        jTextFieldBairro.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Bairro", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(102, 102, 102))); // NOI18N
-        jTextFieldBairro.addActionListener(new java.awt.event.ActionListener() {
+        ruaCheckBox.setText("Rua");
+        ruaCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldBairroActionPerformed(evt);
+                ruaCheckBoxActionPerformed(evt);
             }
         });
 
@@ -1398,57 +1393,65 @@ public class Interface extends javax.swing.JFrame {
         endereco.setLayout(enderecoLayout);
         enderecoLayout.setHorizontalGroup(
             enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(enderecoLayout.createSequentialGroup()
-                .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, enderecoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(bairroCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(bairro, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(ruaCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(rua, 0, 192, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(numero, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         enderecoLayout.setVerticalGroup(
             enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(enderecoLayout.createSequentialGroup()
-                .addGroup(enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldBairro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, enderecoLayout.createSequentialGroup()
+                .addComponent(numero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, enderecoLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bairroCheckBox)
+                    .addComponent(bairro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(ruaCheckBox)
+                        .addComponent(rua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         pesquisa.add(endereco, "card2");
 
-        jTextField4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-
-        jTextField5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-
         jLabel22.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel22.setForeground(new java.awt.Color(102, 102, 102));
         jLabel22.setText("até");
+
+        data1.setDateFormatString("dd/MM/yyyy");
+
+        data2.setDateFormatString("dd/MM/yyyy");
 
         javax.swing.GroupLayout dataLayout = new javax.swing.GroupLayout(data);
         data.setLayout(dataLayout);
         dataLayout.setHorizontalGroup(
             dataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dataLayout.createSequentialGroup()
-                .addContainerGap(153, Short.MAX_VALUE)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addContainerGap(174, Short.MAX_VALUE)
+                .addComponent(data1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel22)
-                .addGap(16, 16, 16)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(151, 151, 151))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(data2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(130, 130, 130))
         );
         dataLayout.setVerticalGroup(
             dataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dataLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(dataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dataLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(dataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel22)))
-                    .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.TRAILING))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dataLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(dataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(data2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(data1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel22))
                 .addContainerGap())
         );
 
@@ -1458,8 +1461,8 @@ public class Interface extends javax.swing.JFrame {
         jLabel23.setForeground(new java.awt.Color(102, 102, 102));
         jLabel23.setText("Espécie do animal:");
 
-        jTextField6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jTextField6.setForeground(new java.awt.Color(102, 102, 102));
+        especie.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        especie.setForeground(new java.awt.Color(102, 102, 102));
 
         javax.swing.GroupLayout animalLayout = new javax.swing.GroupLayout(animal);
         animal.setLayout(animalLayout);
@@ -1469,7 +1472,7 @@ public class Interface extends javax.swing.JFrame {
                 .addGap(131, 131, 131)
                 .addComponent(jLabel23)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(especie, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(154, Short.MAX_VALUE))
         );
         animalLayout.setVerticalGroup(
@@ -1478,59 +1481,59 @@ public class Interface extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(animalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel23)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(especie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pesquisa.add(animal, "card5");
 
-        jCisterna.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jCisterna.setForeground(new java.awt.Color(102, 102, 102));
-        jCisterna.setText("Cisterna");
-        jCisterna.addMouseListener(new java.awt.event.MouseAdapter() {
+        cisterna.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        cisterna.setForeground(new java.awt.Color(102, 102, 102));
+        cisterna.setText("Cisterna");
+        cisterna.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jCisternaMouseClicked(evt);
+                cisternaMouseClicked(evt);
             }
         });
 
-        jCaixa.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jCaixa.setForeground(new java.awt.Color(102, 102, 102));
-        jCaixa.setText("Caixa d'água");
-        jCaixa.addMouseListener(new java.awt.event.MouseAdapter() {
+        cxdagua.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        cxdagua.setForeground(new java.awt.Color(102, 102, 102));
+        cxdagua.setText("Caixa d'água");
+        cxdagua.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jCaixaMouseClicked(evt);
+                cxdaguaMouseClicked(evt);
             }
         });
 
-        jAnimal.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jAnimal.setForeground(new java.awt.Color(102, 102, 102));
-        jAnimal.setText("Animais");
-        jAnimal.addMouseListener(new java.awt.event.MouseAdapter() {
+        animais.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        animais.setForeground(new java.awt.Color(102, 102, 102));
+        animais.setText("Animais");
+        animais.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jAnimalMouseClicked(evt);
+                animaisMouseClicked(evt);
             }
         });
 
-        jFossa.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jFossa.setForeground(new java.awt.Color(102, 102, 102));
-        jFossa.setText("Fossa sep.");
-        jFossa.addItemListener(new java.awt.event.ItemListener() {
+        fossa.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        fossa.setForeground(new java.awt.Color(102, 102, 102));
+        fossa.setText("Fossa sep.");
+        fossa.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jFossaItemStateChanged(evt);
+                fossaItemStateChanged(evt);
             }
         });
-        jFossa.addMouseListener(new java.awt.event.MouseAdapter() {
+        fossa.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jFossaMouseClicked(evt);
+                fossaMouseClicked(evt);
             }
         });
 
-        jPoco.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jPoco.setForeground(new java.awt.Color(102, 102, 102));
-        jPoco.setText("Poço art.");
-        jPoco.addMouseListener(new java.awt.event.MouseAdapter() {
+        poco.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        poco.setForeground(new java.awt.Color(102, 102, 102));
+        poco.setText("Poço art.");
+        poco.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jPocoMouseClicked(evt);
+                pocoMouseClicked(evt);
             }
         });
 
@@ -1540,15 +1543,15 @@ public class Interface extends javax.swing.JFrame {
             questionarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(questionarioLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jCisterna)
+                .addComponent(cisterna)
                 .addGap(31, 31, 31)
-                .addComponent(jCaixa)
+                .addComponent(cxdagua)
                 .addGap(27, 27, 27)
-                .addComponent(jPoco)
+                .addComponent(poco)
                 .addGap(35, 35, 35)
-                .addComponent(jFossa)
+                .addComponent(fossa)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-                .addComponent(jAnimal)
+                .addComponent(animais)
                 .addContainerGap())
         );
         questionarioLayout.setVerticalGroup(
@@ -1556,11 +1559,11 @@ public class Interface extends javax.swing.JFrame {
             .addGroup(questionarioLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(questionarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCisterna)
-                    .addComponent(jCaixa)
-                    .addComponent(jAnimal)
-                    .addComponent(jFossa)
-                    .addComponent(jPoco))
+                    .addComponent(cisterna)
+                    .addComponent(cxdagua)
+                    .addComponent(animais)
+                    .addComponent(fossa)
+                    .addComponent(poco))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1648,6 +1651,11 @@ public class Interface extends javax.swing.JFrame {
 
         jButton8.setForeground(new java.awt.Color(102, 102, 102));
         jButton8.setText("Limpar");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout buscarLayout = new javax.swing.GroupLayout(buscar);
         buscar.setLayout(buscarLayout);
@@ -1956,14 +1964,6 @@ public class Interface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jLabel14MouseClicked
 
-    private void jTextFieldBairroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldBairroActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldBairroActionPerformed
-
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
     private void pesquisarPorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_pesquisarPorItemStateChanged
         // TODO add your handling code here:
         if(pesquisarPor.getSelectedItem().equals("Endereço")){
@@ -2000,34 +2000,34 @@ public class Interface extends javax.swing.JFrame {
         btnExportar.setForeground(cadastrar.getBackground());
     }//GEN-LAST:event_btnExportarMouseExited
 
-    private void jCisternaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCisternaMouseClicked
+    private void cisternaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cisternaMouseClicked
         // TODO add your handling code here:
-        desmarcarPesquisa(jCisterna);
-    }//GEN-LAST:event_jCisternaMouseClicked
+        desmarcarPesquisa(cisterna);
+    }//GEN-LAST:event_cisternaMouseClicked
 
-    private void jCaixaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCaixaMouseClicked
+    private void cxdaguaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cxdaguaMouseClicked
         // TODO add your handling code here:
-        desmarcarPesquisa(jCaixa);
-    }//GEN-LAST:event_jCaixaMouseClicked
+        desmarcarPesquisa(cxdagua);
+    }//GEN-LAST:event_cxdaguaMouseClicked
 
-    private void jPocoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPocoMouseClicked
+    private void pocoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pocoMouseClicked
         // TODO add your handling code here:
-        desmarcarPesquisa(jPoco);
-    }//GEN-LAST:event_jPocoMouseClicked
+        desmarcarPesquisa(poco);
+    }//GEN-LAST:event_pocoMouseClicked
 
-    private void jFossaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFossaMouseClicked
+    private void fossaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fossaMouseClicked
         // TODO add your handling code here:
-        desmarcarPesquisa(jFossa);
-    }//GEN-LAST:event_jFossaMouseClicked
+        desmarcarPesquisa(fossa);
+    }//GEN-LAST:event_fossaMouseClicked
 
-    private void jAnimalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jAnimalMouseClicked
+    private void animaisMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_animaisMouseClicked
         // TODO add your handling code here:
-        desmarcarPesquisa(jAnimal);
-    }//GEN-LAST:event_jAnimalMouseClicked
+        desmarcarPesquisa(animais);
+    }//GEN-LAST:event_animaisMouseClicked
 
-    private void jFossaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jFossaItemStateChanged
+    private void fossaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_fossaItemStateChanged
         // TODO add your handling code here:
-    }//GEN-LAST:event_jFossaItemStateChanged
+    }//GEN-LAST:event_fossaItemStateChanged
 
     private void pergunta1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pergunta1MouseClicked
         // TODO add your handling code here:
@@ -2119,7 +2119,7 @@ public class Interface extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
-        pdao.getAllResultados(resultadoPesquisa);
+        
         jLabelNResultados.setText(resultadoPesquisa.getRowCount() + "");
         
     }//GEN-LAST:event_jButton7ActionPerformed
@@ -2136,8 +2136,20 @@ public class Interface extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        pdao.getResultadosBairro(resultadoPesquisa,jTextFieldBairro.getText());
+        pdao.pesquisar(resultadoPesquisa, ruaCheckBox, numero, bairroCheckBox, numero, numero, data1, data2, especie, cisterna, cxdagua, poco, fossa, animais);
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void bairroCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bairroCheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bairroCheckBoxActionPerformed
+
+    private void ruaCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ruaCheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ruaCheckBoxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2178,7 +2190,10 @@ public class Interface extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel abas;
     private javax.swing.JPanel acoes;
+    private javax.swing.JCheckBox animais;
     private javax.swing.JPanel animal;
+    private javax.swing.JComboBox<String> bairro;
+    private javax.swing.JCheckBox bairroCheckBox;
     private javax.swing.JLabel btnBuscar;
     private javax.swing.JLabel btnCadastrar;
     private javax.swing.JLabel btnExportar;
@@ -2189,14 +2204,19 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JTextField cadastrarData;
     private javax.swing.JTextField cadastrarNome;
     private javax.swing.JTextField cadastrarNumero;
+    private javax.swing.JCheckBox cisterna;
     private javax.swing.JPanel criar;
+    private javax.swing.JCheckBox cxdagua;
     private javax.swing.JPanel data;
+    private com.toedter.calendar.JDateChooser data1;
+    private com.toedter.calendar.JDateChooser data2;
     private javax.swing.JPanel divisor;
     private javax.swing.JPanel editar;
     private javax.swing.JPanel endereco;
+    private javax.swing.JTextField especie;
+    private javax.swing.JCheckBox fossa;
     private javax.swing.JPanel home;
     private javax.swing.JTextArea jAnimais;
-    private javax.swing.JCheckBox jAnimal;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -2205,11 +2225,8 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
-    private javax.swing.JCheckBox jCaixa;
-    private javax.swing.JCheckBox jCisterna;
     private javax.swing.JComboBox<String> jComboBoxBairros;
     private javax.swing.JComboBox<String> jComboBoxRuas;
-    private javax.swing.JCheckBox jFossa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -2269,19 +2286,13 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JCheckBox jPoco;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTable jTableResultados;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextFieldBairro;
+    private javax.swing.JTextField numero;
     private javax.swing.JLabel p1p2;
     private javax.swing.JLabel p2p1;
     private javax.swing.JLabel p2p2;
@@ -2298,11 +2309,14 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JCheckBox pergunta5;
     private javax.swing.JPanel pesquisa;
     private javax.swing.JComboBox<String> pesquisarPor;
+    private javax.swing.JCheckBox poco;
     private javax.swing.JLabel possuemAnimais;
     private javax.swing.JLabel possuemCaixa;
     private javax.swing.JLabel possuemFossa;
     private javax.swing.JLabel possuemPoco;
     private javax.swing.JPanel questionario;
+    private javax.swing.JComboBox<String> rua;
+    private javax.swing.JCheckBox ruaCheckBox;
     private javax.swing.JLabel totalForms;
     private javax.swing.JLabel totalPessoas;
     // End of variables declaration//GEN-END:variables

@@ -58,12 +58,12 @@ public class PessoaDAO {
                 + "on idpessoas = idperguntas\n"
                 + "LEFT JOIN tbl_animais\n"
                 + "ON idpessoas = idanimais\n"
-                + "?"
-                + "group by idpessoas\n"
-                + "order by idpessoas asc;";
+                //+ "where true ?"
+                + "group by idpessoas "
+                + "order by idpessoas asc";
 
         try {
-            String condicao = "where true ";
+            String condicao = "";
             
             if (ruaCheckBox.isSelected()) {
                 condicao = condicao + " and rua = " + rua.getText();
@@ -96,8 +96,9 @@ public class PessoaDAO {
                 condicao = condicao + " and animais = 1";
             }
           
-            pst.setString(1, condicao);
+            
             pst = conexao.prepareStatement(sql);
+            //pst.setString(1, condicao);
             rs = pst.executeQuery();
             while (rs.next()) {
                 tabela.addRow(new Object[]{

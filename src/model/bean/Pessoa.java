@@ -25,6 +25,14 @@ public class Pessoa {
         this.questionario = questionario;
     }
 
+    public Pessoa(String nome, String rua, String bairro, String numero, ArrayList<Questionario> questionario) {
+        this.nome = nome;
+        this.rua = rua;
+        this.bairro = bairro;
+        this.numero = numero;
+        this.questionario = questionario;
+    }
+
     public int getId() {
         return id;
     }

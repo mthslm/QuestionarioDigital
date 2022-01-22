@@ -43,4 +43,12 @@ public class QuestionarioDAO {
         }
     }
 
+    public void cadastrarQuestionario(int id){
+        Connection conexao = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        conexao = ConnectionFactory.conector();
+        String sql = "INSERT INTO tbl_perguntas (idperguntas,cisterna,cisternaconsumo,cxdagua,tampada,pcartesiano,pococonsumo,fseptica,animais,capacidade,datapergunta) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        
+    }
 }

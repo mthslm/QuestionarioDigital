@@ -17,6 +17,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -132,7 +133,7 @@ public class Interface extends javax.swing.JFrame {
                 listaQuestionarios.addRow(new Object[]{quests.getData()});
             }
         }
-        if (jTableQuestionarios.getSelectedRow() >= 0) {
+        if (jTableQuestionarios.getSelectedRow() >= 0&&jTableQuestionarios.isShowing()) {
             cadastrarData.setDate(pdao.getPessoa(id).getQuestionario().get(jTableQuestionarios.getSelectedRow()).getData());
             pergunta1.setSelected(pdao.getPessoa(id).getQuestionario().get(jTableQuestionarios.getSelectedRow()).isCisterna());
             pergunta1p2.setSelected(pdao.getPessoa(id).getQuestionario().get(jTableQuestionarios.getSelectedRow()).isCisternaconsumo());
@@ -1173,8 +1174,18 @@ public class Interface extends javax.swing.JFrame {
         jScrollPane5.setViewportView(jTableAnimais);
 
         jButton7.setText("Adicionar");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         jButton9.setText("Remover");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
         jPanel19.setLayout(jPanel19Layout);
@@ -1482,12 +1493,13 @@ public class Interface extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, enderecoLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bairroCheckBox)
-                    .addComponent(bairro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(ruaCheckBox)
-                        .addComponent(rua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(rua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(bairroCheckBox)
+                        .addComponent(bairro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -2178,10 +2190,11 @@ public class Interface extends javax.swing.JFrame {
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
         if (jTableResultados.getSelectedRow() >= 0) {
+            idpessoa = Integer.parseInt(jTableResultados.getValueAt(jTableResultados.getSelectedRow(), 5).toString());
+            limparCampos();
+            preencherFormulario(idpessoa);
             trocarAba(cadastrar);
             trocarCriarEditar(editar);
-            idpessoa = Integer.parseInt(jTableResultados.getValueAt(jTableResultados.getSelectedRow(), 5).toString());
-            preencherFormulario(idpessoa);
         }
     }//GEN-LAST:event_jButton6ActionPerformed
 
@@ -2193,6 +2206,20 @@ public class Interface extends javax.swing.JFrame {
     private void jTableAnimaisMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableAnimaisMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_jTableAnimaisMouseClicked
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        listaAnimais.addRow(new Object[] {"",""});
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+        try{
+        listaAnimais.removeRow(jTableAnimais.getSelectedRow());
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(this, "Você precisa selecionar uma linha correspondente a uma espécie de animal para remover.");
+        }
+    }//GEN-LAST:event_jButton9ActionPerformed
 
     /**
      * @param args the command line arguments

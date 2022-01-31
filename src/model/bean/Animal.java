@@ -12,22 +12,19 @@ import java.util.Date;
  * @author Matheus
  */
 public class Animal {
-    private String especie;
-    private int quantidade;
+    private String especie, sexo, chip;
+    private int idade;
     private Date data;
+    private boolean castrado;
 
-    public Animal(String especie, int quantidade, Date data) {
+    public Animal(String especie, String sexo, String chip, int idade, Date data, boolean castrado) {
         this.especie = especie;
-        this.quantidade = quantidade;
+        this.sexo = sexo;
+        this.chip = chip;
+        this.idade = idade;
         this.data = data;
+        this.castrado = castrado;
     }
-
-    public Animal(String especie, int quantidade) {
-        this.especie = especie;
-        this.quantidade = quantidade;
-    }
-    
-    
 
     public String getEspecie() {
         return especie;
@@ -37,12 +34,28 @@ public class Animal {
         this.especie = especie;
     }
 
-    public int getQuantidade() {
-        return quantidade;
+    public String getSexo() {
+        return sexo;
     }
 
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
+    }
+
+    public String getChip() {
+        return chip;
+    }
+
+    public void setChip(String chip) {
+        this.chip = chip;
+    }
+
+    public int getIdade() {
+        return idade;
+    }
+
+    public void setIdade(int idade) {
+        this.idade = idade;
     }
 
     public Date getData() {
@@ -52,6 +65,13 @@ public class Animal {
     public void setData(Date data) {
         this.data = data;
     }
-    
+
+    public boolean isCastrado() {
+        return castrado;
+    }
+
+    public void setCastrado(boolean castrado) {
+        this.castrado = castrado;
+    }
     
 }

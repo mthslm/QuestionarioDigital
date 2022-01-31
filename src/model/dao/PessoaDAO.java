@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Pessoa;
@@ -36,12 +37,12 @@ public class PessoaDAO {
         PreparedStatement pst = null;
         ResultSet rs = null;
         conexao = ConnectionFactory.conector();
-        String sql = "select * from tbl_pessoas where idpessoas = " + id;
+        String sql = "select idpessoas, nome, rua, bairro, numero, complemento, area from tbl_pessoas where idpessoas = " + id;
         try {
             pst = conexao.prepareStatement(sql);
             rs = pst.executeQuery();
             rs.next();
-            Pessoa pessoa = new Pessoa(id, rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(2), qdao.getQuestionario(id));
+            Pessoa pessoa = new Pessoa(id, rs.getString("nome"), rs.getString("rua"), rs.getString("bairro"), rs.getString("numero"), rs.getString("complemento"), rs.getInt("area"), qdao.getQuestionario(id));
             rs.close();
             pst.close();
             conexao.close();
@@ -127,29 +128,41 @@ public class PessoaDAO {
         }
     }
 
-    public int cadastrarPessoa(JTextField nome, JComboBox rua, JComboBox bairro, JTextField numero, ArrayList questionario, ArrayList animais) {
+    public int cadastrarPessoa(JTextField cadastrarRuaCampo, JComboBox cadastrarArea, JPanel campoRua, JTextField cadastrarComplemento, JTextField nome, JComboBox rua, JComboBox bairro, JTextField numero) {
         Connection conexao = null;
         PreparedStatement pst = null;
         PreparedStatement pst1 = null;
         ResultSet rs = null;
         conexao = ConnectionFactory.conector();
-        String sql = "INSERT INTO tbl_pessoas (nome,rua,bairro,numero) VALUES (?,?,?,?)";
-        String sql1 = "select id, rua, bairro, numero from tbl_pessoas where rua = ? and bairro = ? and numero = ?";
+        String sql = "INSERT INTO tbl_pessoas (nome,rua,bairro,numero, complemento, area) VALUES (?,?,?,?,?,?)";
+        String sql1 = "select idpessoas, rua, bairro, numero, complemento, area from tbl_pessoas where rua = ? and bairro = ? and numero = ? and complemento = ? and area = ?";
 
         int id = 0;
 
         try {
             pst = conexao.prepareStatement(sql, pst.RETURN_GENERATED_KEYS);
             pst1 = conexao.prepareStatement(sql1);
-            pst1.setString(1, rua.getSelectedItem().toString());
+            if (campoRua.isShowing()) {
+                pst1.setString(1, cadastrarRuaCampo.getText());
+            } else {
+                pst1.setString(1, rua.getSelectedItem().toString());
+            }
             pst1.setString(2, bairro.getSelectedItem().toString());
             pst1.setString(3, numero.getText());
+            pst1.setString(4, cadastrarComplemento.getText());
+            pst1.setString(5, cadastrarArea.getSelectedItem().toString());
             rs = pst1.executeQuery();
-            if (rs.next()) {
+            if (!rs.next()) {
                 pst.setString(1, nome.getText());
-                pst.setString(2, rua.getSelectedItem().toString());
+                if (campoRua.isShowing()) {
+                    pst.setString(2, cadastrarRuaCampo.getText());
+                } else {
+                    pst.setString(2, rua.getSelectedItem().toString());
+                }
                 pst.setString(3, bairro.getSelectedItem().toString());
                 pst.setString(4, numero.getText());
+                pst.setString(5, cadastrarComplemento.getText());
+                pst.setInt(6, Integer.parseInt(cadastrarArea.getSelectedItem().toString()));
                 pst.executeUpdate();
                 rs = pst.getGeneratedKeys();
                 rs.next();
@@ -157,6 +170,9 @@ public class PessoaDAO {
             } else {
                 id = rs.getInt(1);
             }
+            rs.close();
+            pst.close();
+            conexao.close();
         } catch (SQLException ex) {
             Logger.getLogger(PessoaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

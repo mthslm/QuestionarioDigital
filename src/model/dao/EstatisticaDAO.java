@@ -47,6 +47,7 @@ public class EstatisticaDAO {
             pst.close();
             return n;
         } catch (Exception e) {
+            System.out.println(e);
             return n;
         }
     }

@@ -12,17 +12,21 @@ import java.util.ArrayList;
  * @author Matheus
  */
 public class Pessoa {
+
     private int id;
-    private String  nome , rua , bairro, numero;
+    private String nome, rua, bairro, numero, complemento;
+    private int area;
     private ArrayList<Questionario> questionario;
 
-    public Pessoa(int id, String nome, String rua, String bairro, String numero, ArrayList<Questionario> questionario) {
+    public Pessoa(int id, String nome, String rua, String bairro, String numero, String complemento, int area, ArrayList<Questionario> questionario) {
         this.id = id;
         this.nome = nome;
         this.rua = rua;
         this.bairro = bairro;
         this.numero = numero;
         this.questionario = questionario;
+        this.area = area;
+        this.complemento = complemento;
     }
 
     public Pessoa(String nome, String rua, String bairro, String numero, ArrayList<Questionario> questionario) {
@@ -81,5 +85,20 @@ public class Pessoa {
         this.questionario = questionario;
     }
 
-    
+    public int getArea() {
+        return area;
+    }
+
+    public void setArea(int area) {
+        this.area = area;
+    }
+
+    public String getComplemento() {
+        return complemento;
+    }
+
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
+    }
+
 }

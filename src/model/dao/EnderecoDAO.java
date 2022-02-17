@@ -51,7 +51,6 @@ public class EnderecoDAO {
             while(rs.next()){
                 rua.addItem(rs.getString(1));
             }
-            rua.addItem("Outro");
         } catch (SQLException ex) {
             System.out.println("erro");
         }

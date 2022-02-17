@@ -11,8 +11,14 @@ import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.net.URI;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
@@ -20,6 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.plaf.OptionPaneUI;
 import javax.swing.table.DefaultTableModel;
 import model.dao.AnimalDAO;
 import model.dao.EstatisticaDAO;
@@ -48,6 +55,7 @@ public class Interface extends javax.swing.JFrame {
 
     public Interface() {
         initComponents();
+        jTableAnimais.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(jComboBoxSexoAnimal));
         icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagens/logo.png"));
         setIconImage(icon);
         atualizarEstatisticas();
@@ -58,16 +66,19 @@ public class Interface extends javax.swing.JFrame {
         resultadoPesquisa = (DefaultTableModel) jTableResultados.getModel();
         listaQuestionarios = (DefaultTableModel) jTableQuestionarios.getModel();
         listaAnimais = (DefaultTableModel) jTableAnimais.getModel();
+        System.out.println(pdao.getPessoa(176).getQuestionario().get(0).getAnimais());
     }
 
     public void atualizarEstatisticas() {
         int tf = estdao.numPessoas();
         totalPessoas.setText(tf + "");
-        possuemAnimais.setText(((100 * estdao.numAnimais()) / tf) + "%");
-        possuemCaixa.setText(((100 * estdao.numCaixa()) / tf) + "%");
-        possuemPoco.setText(((100 * estdao.numPoco()) / tf) + "%");
-        possuemFossa.setText(((100 * estdao.numFossa()) / tf) + "%");
-        totalForms.setText(estdao.numForms() + "");
+        if (tf != 0) {
+            possuemAnimais.setText(((100 * estdao.numAnimais()) / tf) + "%");
+            possuemCaixa.setText(((100 * estdao.numCaixa()) / tf) + "%");
+            possuemPoco.setText(((100 * estdao.numPoco()) / tf) + "%");
+            possuemFossa.setText(((100 * estdao.numFossa()) / tf) + "%");
+            totalForms.setText(estdao.numForms() + "");
+        }
     }
 
     public void trocarAba(JPanel aba) {
@@ -105,7 +116,7 @@ public class Interface extends javax.swing.JFrame {
         pesquisa.repaint();
         pesquisa.revalidate();
     }
-    
+
     public void trocarCampoRua(JPanel aba) {
         jPanelRua.removeAll();
         jPanelRua.add(aba);
@@ -115,8 +126,14 @@ public class Interface extends javax.swing.JFrame {
 
     public void limparCampos() {
         JCheckBox selecoes[] = {pergunta1, pergunta1p2, pergunta2, pergunta2p1, pergunta3, pergunta3p1, pergunta4, pergunta5};
-        JTextField campos[] = {cadastrarNome, cadastrarNumero, pergunta2p2};
+        JTextField campos[] = {cadastrarNome, cadastrarNumero, cadastrarComplemento};
         cadastrarData.setDate(null);
+        pergunta2p2.setValue(0);
+        trocarCampoRua(selecaoRua);
+        cadastrarArea.setSelectedIndex(0);
+        jComboBoxBairros.setSelectedIndex(0);
+        jComboBoxRuas.setSelectedIndex(0);
+        
         for (JTextField campo : campos) {
             campo.setText("");
         }
@@ -131,29 +148,32 @@ public class Interface extends javax.swing.JFrame {
         if (!jTableQuestionarios.isShowing()) {
             listaQuestionarios.setRowCount(0);
             jComboBoxBairros.setSelectedItem(pdao.getPessoa(id).getBairro());
-            jComboBoxRuas.setSelectedItem(pdao.getPessoa(id).getRua());
+
+            trocarCampoRua(campoRua);
+            cadastrarRuaCampo.setText(pdao.getPessoa(id).getRua());
+
             cadastrarNumero.setText(pdao.getPessoa(id).getNumero());
             cadastrarNome.setText(pdao.getPessoa(id).getNome());
-            numQuestionarios.setText(pdao.getPessoa(id).getQuestionario().size()+"");
+            numQuestionarios.setText(pdao.getPessoa(id).getQuestionario().size() + "");
 
             for (Questionario quests : pdao.getPessoa(id).getQuestionario()) {
                 listaQuestionarios.addRow(new Object[]{quests.getData()});
             }
         }
-        if (jTableQuestionarios.getSelectedRow() >= 0&&jTableQuestionarios.isShowing()) {
+        if (jTableQuestionarios.getSelectedRow() >= 0 && jTableQuestionarios.isShowing()) {
             cadastrarData.setDate(pdao.getPessoa(id).getQuestionario().get(jTableQuestionarios.getSelectedRow()).getData());
             pergunta1.setSelected(pdao.getPessoa(id).getQuestionario().get(jTableQuestionarios.getSelectedRow()).isCisterna());
             pergunta1p2.setSelected(pdao.getPessoa(id).getQuestionario().get(jTableQuestionarios.getSelectedRow()).isCisternaconsumo());
             pergunta2.setSelected(pdao.getPessoa(id).getQuestionario().get(jTableQuestionarios.getSelectedRow()).isCxdagua());
             pergunta2p1.setSelected(pdao.getPessoa(id).getQuestionario().get(jTableQuestionarios.getSelectedRow()).isTampada());
-            pergunta2p2.setText(pdao.getPessoa(id).getQuestionario().get(jTableQuestionarios.getSelectedRow()).getCapacidade() + "");
+            pergunta2p2.setValue(pdao.getPessoa(id).getQuestionario().get(jTableQuestionarios.getSelectedRow()).getCapacidade());
             pergunta3.setSelected(pdao.getPessoa(id).getQuestionario().get(jTableQuestionarios.getSelectedRow()).isPcartesiano());
             pergunta3p1.setSelected(pdao.getPessoa(id).getQuestionario().get(jTableQuestionarios.getSelectedRow()).isPococonsumo());
             pergunta4.setSelected(pdao.getPessoa(id).getQuestionario().get(jTableQuestionarios.getSelectedRow()).isFseptica());
             pergunta5.setSelected(pdao.getPessoa(id).getQuestionario().get(jTableQuestionarios.getSelectedRow()).isAnimal());
 
-            for(Animal a: pdao.getPessoa(id).getQuestionario().get(jTableQuestionarios.getSelectedRow()).getAnimais()){
-                listaAnimais.addRow(new Object[] {a.getEspecie(),a.getSexo(),a.isCastrado(),a.getIdade(),a.getChip()});
+            for (Animal a : pdao.getPessoa(id).getQuestionario().get(jTableQuestionarios.getSelectedRow()).getAnimais()) {
+                listaAnimais.addRow(new Object[]{a.getEspecie(), a.getSexo(), a.isCastrado(), a.getIdade(), a.getChip()});
             }
 
         }
@@ -168,6 +188,7 @@ public class Interface extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jComboBoxSexoAnimal = new javax.swing.JComboBox<>();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -220,6 +241,7 @@ public class Interface extends javax.swing.JFrame {
         jPanelRua = new javax.swing.JPanel();
         selecaoRua = new javax.swing.JPanel();
         jComboBoxRuas = new javax.swing.JComboBox<>();
+        jButton11 = new javax.swing.JButton();
         campoRua = new javax.swing.JPanel();
         selecaoRua1 = new javax.swing.JPanel();
         cadastrarRuaCampo = new javax.swing.JTextField();
@@ -239,8 +261,8 @@ public class Interface extends javax.swing.JFrame {
         p2p1 = new javax.swing.JLabel();
         pergunta2p1 = new javax.swing.JCheckBox();
         jPanel14 = new javax.swing.JPanel();
-        pergunta2p2 = new javax.swing.JTextField();
         p2p2 = new javax.swing.JLabel();
+        pergunta2p2 = new javax.swing.JSpinner();
         jPanel15 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         pergunta3 = new javax.swing.JCheckBox();
@@ -309,6 +331,8 @@ public class Interface extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
+
+        jComboBoxSexoAnimal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Masculino", "Feminino", "Não sei" }));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Formulário Digital");
@@ -872,24 +896,36 @@ public class Interface extends javax.swing.JFrame {
             }
         });
 
+        jButton11.setText("Campo");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout selecaoRuaLayout = new javax.swing.GroupLayout(selecaoRua);
         selecaoRua.setLayout(selecaoRuaLayout);
         selecaoRuaLayout.setHorizontalGroup(
             selecaoRuaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jComboBoxRuas, 0, 243, Short.MAX_VALUE)
+            .addGroup(selecaoRuaLayout.createSequentialGroup()
+                .addComponent(jComboBoxRuas, 0, 172, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton11))
         );
         selecaoRuaLayout.setVerticalGroup(
             selecaoRuaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, selecaoRuaLayout.createSequentialGroup()
-                .addGap(0, 2, Short.MAX_VALUE)
-                .addComponent(jComboBoxRuas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 1, Short.MAX_VALUE)
+                .addGroup(selecaoRuaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBoxRuas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton11)))
         );
 
         jPanelRua.add(selecaoRua, "card2");
 
         campoRua.setLayout(new java.awt.CardLayout());
 
-        jButton10.setText("Voltar");
+        jButton10.setText("Seleção");
         jButton10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton10ActionPerformed(evt);
@@ -901,7 +937,7 @@ public class Interface extends javax.swing.JFrame {
         selecaoRua1Layout.setHorizontalGroup(
             selecaoRua1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(selecaoRua1Layout.createSequentialGroup()
-                .addComponent(cadastrarRuaCampo, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+                .addComponent(cadastrarRuaCampo, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton10))
         );
@@ -1089,15 +1125,6 @@ public class Interface extends javax.swing.JFrame {
                 .addComponent(pergunta2p1))
         );
 
-        pergunta2p2.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.background"));
-        pergunta2p2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        pergunta2p2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        pergunta2p2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pergunta2p2ActionPerformed(evt);
-            }
-        });
-
         p2p2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         p2p2.setForeground(new java.awt.Color(51, 51, 51));
         p2p2.setText("2.2. Capacidade");
@@ -1108,7 +1135,7 @@ public class Interface extends javax.swing.JFrame {
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addComponent(p2p2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(pergunta2p2))
         );
         jPanel14Layout.setVerticalGroup(
@@ -1268,6 +1295,9 @@ public class Interface extends javax.swing.JFrame {
             }
         });
         jScrollPane5.setViewportView(jTableAnimais);
+        if (jTableAnimais.getColumnModel().getColumnCount() > 0) {
+            jTableAnimais.getColumnModel().getColumn(1).setCellEditor(null);
+        }
 
         jButton7.setText("Adicionar");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
@@ -1375,7 +1405,7 @@ public class Interface extends javax.swing.JFrame {
         criar.setLayout(criarLayout);
         criarLayout.setHorizontalGroup(
             criarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, criarLayout.createSequentialGroup()
+            .addGroup(criarLayout.createSequentialGroup()
                 .addContainerGap(17, Short.MAX_VALUE)
                 .addGroup(criarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2082,10 +2112,6 @@ public class Interface extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_pergunta3ActionPerformed
 
-    private void pergunta2p2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pergunta2p2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_pergunta2p2ActionPerformed
-
     private void pergunta2p1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pergunta2p1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_pergunta2p1ActionPerformed
@@ -2303,14 +2329,14 @@ public class Interface extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
-        listaAnimais.addRow(new Object[] {"",""});
+        listaAnimais.addRow(new Object[]{"", ""});
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         // TODO add your handling code here:
-        try{
-        listaAnimais.removeRow(jTableAnimais.getSelectedRow());
-        }catch(Exception ex){
+        try {
+            listaAnimais.removeRow(jTableAnimais.getSelectedRow());
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Você precisa selecionar uma linha correspondente a uma espécie de animal para remover.");
         }
     }//GEN-LAST:event_jButton9ActionPerformed
@@ -2326,18 +2352,29 @@ public class Interface extends javax.swing.JFrame {
 
     private void jComboBoxRuasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxRuasItemStateChanged
         // TODO add your handling code here:
-        /*if(jComboBoxRuas.getSelectedItem().toString().equals("Outro")){
-            trocarCampoRua(campoRua);
-            jComboBoxRuas.setSelectedIndex(0);
-        }*/
+
     }//GEN-LAST:event_jComboBoxRuasItemStateChanged
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        int id = pdao.cadastrarPessoa(cadastrarRuaCampo, cadastrarArea, campoRua, cadastrarComplemento, cadastrarNome, jComboBoxRuas, jComboBoxBairros, cadastrarNumero);
-        qdao.cadastrarQuestionario(id, pergunta1, pergunta1p2, pergunta2, pergunta2p1, pergunta2p2, pergunta3, pergunta3p1, pergunta4, pergunta5, cadastrarData);
-        adao.cadastrarAnimal(id, jTableAnimais, cadastrarData);
+        if (cadastrarData.getDate() != null) {
+            int id = pdao.cadastrarPessoa(cadastrarRuaCampo, cadastrarArea, campoRua, cadastrarComplemento, cadastrarNome, jComboBoxRuas, jComboBoxBairros, cadastrarNumero);
+            
+            if(qdao.cadastrarQuestionario(id, pergunta1, pergunta1p2, pergunta2, pergunta2p1, pergunta2p2, pergunta3, pergunta3p1, pergunta4, pergunta5, cadastrarData, this)&&adao.cadastrarAnimal(id, jTableAnimais, cadastrarData)&&id!=0){
+                limparCampos();
+                JOptionPane.showMessageDialog(this, "Questionário salvo com sucesso!");
+            }
+            
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Insira uma data válida.");
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        // TODO add your handling code here:
+        trocarCampoRua(campoRua);
+    }//GEN-LAST:event_jButton11ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2410,6 +2447,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JPanel home;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -2420,6 +2458,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JButton jButton9;
     private javax.swing.JComboBox<String> jComboBoxBairros;
     private javax.swing.JComboBox<String> jComboBoxRuas;
+    private javax.swing.JComboBox<String> jComboBoxSexoAnimal;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -2471,8 +2510,6 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel22;
-    private javax.swing.JPanel jPanel23;
-    private javax.swing.JPanel jPanel24;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -2500,7 +2537,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JCheckBox pergunta1p2;
     private javax.swing.JCheckBox pergunta2;
     private javax.swing.JCheckBox pergunta2p1;
-    private javax.swing.JTextField pergunta2p2;
+    private javax.swing.JSpinner pergunta2p2;
     private javax.swing.JCheckBox pergunta3;
     private javax.swing.JCheckBox pergunta3p1;
     private javax.swing.JCheckBox pergunta4;

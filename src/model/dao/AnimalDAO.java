@@ -31,7 +31,7 @@ public class AnimalDAO {
         ResultSet rs = null;
         ArrayList<Animal> animais = new ArrayList<Animal>();
         conexao = ConnectionFactory.conector();
-        String sql = "select especie, sexo, chip, idade, datanimais, castrado from tbl_animais where idanimais = " + id + " and dataanimais = '" + data + "'";
+        String sql = "select especie, sexo, chip, idade, dataanimais, castrado from tbl_animais where idanimais = " + id + " and dataanimais = '" + data + "'";
         try {
             pst = conexao.prepareStatement(sql);
             rs = pst.executeQuery();
@@ -47,12 +47,44 @@ public class AnimalDAO {
         }
     }
 
-    public void cadastrarAnimal(int id, JTable jTableAnimais, JDateChooser cadastrarData) {
+    public boolean cadastrarAnimal(int id, JTable jTableAnimais, JDateChooser cadastrarData) {
         Connection conexao = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
         conexao = ConnectionFactory.conector();
         String sql = "INSERT INTO tbl_animais (idanimais, especie, sexo, castrado, idade, chip, dataanimais) VALUES (?,?,?,?,?,?,?)";
+
+        try {
+            pst = conexao.prepareStatement(sql);
+            for (int i = 0; i < jTableAnimais.getRowCount(); i++) {
+                pst.setInt(1, id);
+                pst.setString(2, jTableAnimais.getValueAt(i, 0) + "");
+                pst.setString(3, jTableAnimais.getValueAt(i, 1) + "");
+                if (jTableAnimais.getValueAt(i, 2) == null) {
+                    pst.setBoolean(4, false);
+                } else {
+                    pst.setBoolean(4, (boolean) jTableAnimais.getValueAt(i, 2));
+                }
+                pst.setString(5, jTableAnimais.getValueAt(i, 3) + "");
+                pst.setString(6, jTableAnimais.getValueAt(i, 4) + "");
+                SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+                pst.setString(7, dt.format(cadastrarData.getDate()));
+                pst.executeUpdate();
+            }
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(AnimalDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+    public void editarPessoa(int id, JTable jTableAnimais, JDateChooser cadastrarData) {
+        Connection conexao = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        conexao = ConnectionFactory.conector();
+
+        String sql = "UPDATE tbl_animais SET (idanimais, especie, sexo, castrado, idade, chip, dataanimais) VALUES (?,?,?,?,?,?,?)";
 
         try {
             pst = conexao.prepareStatement(sql);
@@ -67,8 +99,11 @@ public class AnimalDAO {
                 pst.setString(7, dt.format(cadastrarData.getDate()));
                 pst.executeUpdate();
             }
+            rs.close();
+            pst.close();
+            conexao.close();
         } catch (SQLException ex) {
-            Logger.getLogger(AnimalDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PessoaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

@@ -7,6 +7,7 @@ package model.dao;
 
 import com.toedter.calendar.JDateChooser;
 import connection.ConnectionFactory;
+import java.awt.Component;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,6 +19,10 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import model.bean.Questionario;
 
@@ -52,7 +57,7 @@ public class QuestionarioDAO {
         }
     }
 
-    public void cadastrarQuestionario(int id, JCheckBox pergunta1, JCheckBox pergunta1p2, JCheckBox pergunta2, JCheckBox pergunta2p1, JTextField pergunta2p2, JCheckBox pergunta3, JCheckBox pergunta3p1, JCheckBox pergunta4, JCheckBox pergunta5, JDateChooser cadastrarData) throws ParseException{
+    public boolean cadastrarQuestionario(int id, JCheckBox pergunta1, JCheckBox pergunta1p2, JCheckBox pergunta2, JCheckBox pergunta2p1, JSpinner pergunta2p2, JCheckBox pergunta3, JCheckBox pergunta3p1, JCheckBox pergunta4, JCheckBox pergunta5, JDateChooser cadastrarData, Component componente){
         
         Connection conexao = null;
         PreparedStatement pst = null;
@@ -67,7 +72,7 @@ public class QuestionarioDAO {
             pst.setBoolean(3, pergunta1p2.isSelected());
             pst.setBoolean(4, pergunta2.isSelected());
             pst.setBoolean(5, pergunta2p1.isSelected());
-            pst.setString(6, pergunta2p2.getText());
+            pst.setInt(6, Integer.parseInt(pergunta2p2.getValue().toString()));
             pst.setBoolean(7, pergunta3.isSelected());
             pst.setBoolean(8, pergunta3p1.isSelected());
             pst.setBoolean(9, pergunta4.isSelected());
@@ -77,8 +82,46 @@ public class QuestionarioDAO {
             pst.executeUpdate();
             pst.close();
             conexao.close();
+            return true;
         } catch (SQLException ex) {
-            Logger.getLogger(QuestionarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.toString().contains("java.sql.SQLIntegrityConstraintViolationException")){
+                JOptionPane.showMessageDialog(componente, "Já existe um formulário com esse endereço para esta mesma data, é possível editá-lo na aba respectiva.");
+                return false;
+            } else {
+                JOptionPane.showMessageDialog(componente, "Falha na conexão com o banco de dados, tente novamente.");
+                return false;
+            }
+        } 
+    }
+    
+    public void editarQuestionario(int id, JCheckBox pergunta1, JCheckBox pergunta1p2, JCheckBox pergunta2, JCheckBox pergunta2p1, JSpinner pergunta2p2, JCheckBox pergunta3, JCheckBox pergunta3p1, JCheckBox pergunta4, JCheckBox pergunta5, JDateChooser cadastrarData) {
+        Connection conexao = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        conexao = ConnectionFactory.conector();
+
+        String sql = "UPDATE tbl_perguntas SET (idperguntas,cisterna,cisternaconsumo,cxdagua,tampada,capacidade,pcartesiano,pococonsumo,fseptica,animais,datapergunta) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setInt(1, id);
+            pst.setBoolean(2, pergunta1.isSelected());
+            pst.setBoolean(3, pergunta1p2.isSelected());
+            pst.setBoolean(4, pergunta2.isSelected());
+            pst.setBoolean(5, pergunta2p1.isSelected());
+            pst.setInt(6, Integer.parseInt(pergunta2p2.getValue().toString()));
+            pst.setBoolean(7, pergunta3.isSelected());
+            pst.setBoolean(8, pergunta3p1.isSelected());
+            pst.setBoolean(9, pergunta4.isSelected());
+            pst.setBoolean(10, pergunta5.isSelected());
+            SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+            pst.setString(11, dt.format(cadastrarData.getDate()));
+            pst.executeUpdate();
+            rs.close();
+            pst.close();
+            conexao.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(PessoaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

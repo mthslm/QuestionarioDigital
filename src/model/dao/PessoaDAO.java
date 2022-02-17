@@ -178,4 +178,33 @@ public class PessoaDAO {
         }
         return id;
     }
+
+    public void editarPessoa(int id,JTextField cadastrarRuaCampo, JComboBox cadastrarArea, JPanel campoRua, JTextField cadastrarComplemento, JTextField nome, JComboBox rua, JComboBox bairro, JTextField numero) {
+        Connection conexao = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        conexao = ConnectionFactory.conector();
+
+        String sql = "UPDATE tbl_pessoas SET nome=?,rua=?,bairro=?,numero=?, complemento=?, area=? where idpessoas = "+id;
+
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, nome.getText());
+            if (campoRua.isShowing()) {
+                pst.setString(2, cadastrarRuaCampo.getText());
+            } else {
+                pst.setString(2, rua.getSelectedItem().toString());
+            }
+            pst.setString(3, bairro.getSelectedItem().toString());
+            pst.setString(4, numero.getText());
+            pst.setString(5, cadastrarComplemento.getText());
+            pst.setInt(6, Integer.parseInt(cadastrarArea.getSelectedItem().toString()));
+            pst.executeUpdate();
+            rs.close();
+            pst.close();
+            conexao.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(PessoaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

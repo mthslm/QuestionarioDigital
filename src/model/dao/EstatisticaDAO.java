@@ -15,11 +15,12 @@ import java.sql.ResultSet;
  * @author Matheus
  */
 public class EstatisticaDAO {
+
     Connection conexao = null;
     PreparedStatement pst = null;
-    ResultSet rs = null; 
-    
-    public int numForms(){
+    ResultSet rs = null;
+
+    public int numForms() {
         conexao = ConnectionFactory.conector();
         String sql = "select count(*) from tbl_perguntas";
         int n = 0;
@@ -34,8 +35,8 @@ public class EstatisticaDAO {
             return n;
         }
     }
-    
-    public int numAnimais(){
+
+    public int numAnimais() {
         conexao = ConnectionFactory.conector();
         String sql = "select count(distinct idperguntas) from tbl_perguntas where animais = 1";
         int n = 0;
@@ -51,8 +52,8 @@ public class EstatisticaDAO {
             return n;
         }
     }
-    
-    public int numCaixa(){
+
+    public int numCaixa() {
         conexao = ConnectionFactory.conector();
         String sql = "select count(distinct idperguntas) from tbl_perguntas where cxdagua = 1";
         int n = 0;
@@ -67,8 +68,8 @@ public class EstatisticaDAO {
             return n;
         }
     }
-    
-    public int numPoco(){
+
+    public int numPoco() {
         conexao = ConnectionFactory.conector();
         String sql = "select count(distinct idperguntas) from tbl_perguntas where pcartesiano = 1";
         int n = 0;
@@ -83,8 +84,8 @@ public class EstatisticaDAO {
             return n;
         }
     }
-    
-    public int numFossa(){
+
+    public int numFossa() {
         conexao = ConnectionFactory.conector();
         String sql = "select count(distinct idperguntas) from tbl_perguntas where fseptica = 1";
         int n = 0;
@@ -99,8 +100,8 @@ public class EstatisticaDAO {
             return n;
         }
     }
-    
-    public int numPessoas(){
+
+    public int numPessoas() {
         conexao = ConnectionFactory.conector();
         String sql = "select count(*) from tbl_pessoas";
         int n = 0;
@@ -114,5 +115,9 @@ public class EstatisticaDAO {
         } catch (Exception e) {
             return n;
         }
+    }
+
+    public void criarDB() {
+        String sql = "";
     }
 }

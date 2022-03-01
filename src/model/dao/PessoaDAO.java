@@ -53,7 +53,7 @@ public class PessoaDAO {
         }
     }
 
-    public void pesquisar(DefaultTableModel tabela, JCheckBox ruaCheckBox, JComboBox rua, JCheckBox bairroCheckBox, JComboBox bairro, JTextField numero, JDateChooser data1, JDateChooser data2, JTextField especie, JCheckBox cisterna, JCheckBox cxdagua, JCheckBox poco, JCheckBox fossa, JCheckBox animais) {
+    public void pesquisar(DefaultTableModel tabela, JTextField rua, JTextField bairro, JTextField numero, JDateChooser data1, JDateChooser data2, JTextField especie, JCheckBox cisterna, JCheckBox cxdagua, JCheckBox poco, JCheckBox fossa, JCheckBox animais, JTextField area, JCheckBox castrado, JCheckBox masc, JCheckBox fem, JTextField idade) {
         Connection conexao = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
@@ -62,11 +62,31 @@ public class PessoaDAO {
 
         String condicao = "";
 
-        if (ruaCheckBox.isSelected()) {
-            condicao = condicao + " and rua = " + "'" + rua.getSelectedItem().toString() + "'";
+        if(castrado.isSelected()){
+            condicao = condicao + " and castrado = 1";
         }
-        if (bairroCheckBox.isSelected()) {
-            condicao = condicao + " and bairro = " + "'" + bairro.getSelectedItem().toString() + "'";
+        
+        if(masc.isSelected()){
+            condicao = condicao + " and sexo = 'Masculino'";
+        }
+        
+        if(fem.isSelected()){
+            condicao = condicao + " and sexo = 'Feminino'";
+        }
+        
+        if (!idade.getText().equals("")) {
+            condicao = condicao + " and idade = '" + idade.getText() + "'";
+        }
+        
+        if (!area.getText().equals("")) {
+            condicao = condicao + " and area like " + "'%" + area.getText() + "%'";
+        }
+        
+        if (!rua.getText().equals("")) {
+            condicao = condicao + " and rua like " + "'%" + rua.getText() + "%'";
+        }
+        if (!bairro.getText().equals("")) {
+            condicao = condicao + " and bairro like " + "'%" + bairro.getText() + "%'";
         }
         if (!numero.getText().equals("")) {
             condicao = condicao + " and numero = " + "'" + numero.getText() + "'";
@@ -76,7 +96,7 @@ public class PessoaDAO {
             condicao = condicao + " and datapergunta between '" + dt.format(data1.getDate()) + "' and '" + dt.format(data2.getDate()) + "'";
         }
         if (!especie.getText().equals("")) {
-            condicao = condicao + " and especie = '" + especie.getText() + "'";
+            condicao = condicao + " and especie like '%" + especie.getText() + "%'";
         }
         if (cisterna.isSelected()) {
             condicao = condicao + " and cisterna = 1";
@@ -108,7 +128,6 @@ public class PessoaDAO {
         try {
 
             pst = conexao.prepareStatement(sql);
-            //pst.setString(1, condicao);
             rs = pst.executeQuery();
             while (rs.next()) {
                 tabela.addRow(new Object[]{
@@ -179,7 +198,7 @@ public class PessoaDAO {
         return id;
     }
 
-    public void editarPessoa(int id,JTextField cadastrarRuaCampo, JComboBox cadastrarArea, JPanel campoRua, JTextField cadastrarComplemento, JTextField nome, JComboBox rua, JComboBox bairro, JTextField numero) {
+    public boolean editarPessoa(int id,JTextField cadastrarRuaCampo, JComboBox cadastrarArea, JPanel campoRua, JTextField cadastrarComplemento, JTextField nome, JComboBox rua, JComboBox bairro, JTextField numero) {
         Connection conexao = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
@@ -200,11 +219,12 @@ public class PessoaDAO {
             pst.setString(5, cadastrarComplemento.getText());
             pst.setInt(6, Integer.parseInt(cadastrarArea.getSelectedItem().toString()));
             pst.executeUpdate();
-            rs.close();
             pst.close();
             conexao.close();
+            return true;
         } catch (SQLException ex) {
             Logger.getLogger(PessoaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
     }
 }

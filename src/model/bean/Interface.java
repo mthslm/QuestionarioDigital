@@ -13,6 +13,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.net.URI;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -61,13 +62,12 @@ public class Interface extends javax.swing.JFrame {
         atualizarEstatisticas();
         enddao.getBairros(jComboBoxBairros);
         enddao.getBairros(jComboBoxBairros);
-        enddao.getBairros(bairro);
-        enddao.getBairros(bairro);
         resultadoPesquisa = (DefaultTableModel) jTableResultados.getModel();
         listaQuestionarios = (DefaultTableModel) jTableQuestionarios.getModel();
         listaAnimais = (DefaultTableModel) jTableAnimais.getModel();
-        System.out.println(pdao.getPessoa(176).getQuestionario().get(0).getAnimais());
     }
+
+
 
     public void atualizarEstatisticas() {
         int tf = estdao.numPessoas();
@@ -96,9 +96,9 @@ public class Interface extends javax.swing.JFrame {
     }
 
     public void limparFiltros() {
-        JCheckBox selecoes[] = {bairroCheckBox, ruaCheckBox, cisterna, cxdagua, poco, fossa, animais};
+        JCheckBox selecoes[] = {cisterna, cxdagua, poco, fossa, animais, masc, fem, castrado};
         JDateChooser datas[] = {data1, data2};
-        JTextField campos[] = {numero, especie};
+        JTextField campos[] = {numero, especie, rua, bairro, area, idade};
         for (JCheckBox selecao : selecoes) {
             selecao.setSelected(false);
         }
@@ -133,7 +133,7 @@ public class Interface extends javax.swing.JFrame {
         cadastrarArea.setSelectedIndex(0);
         jComboBoxBairros.setSelectedIndex(0);
         jComboBoxRuas.setSelectedIndex(0);
-        
+
         for (JTextField campo : campos) {
             campo.setText("");
         }
@@ -300,17 +300,19 @@ public class Interface extends javax.swing.JFrame {
         pesquisa = new javax.swing.JPanel();
         endereco = new javax.swing.JPanel();
         numero = new javax.swing.JTextField();
-        bairroCheckBox = new javax.swing.JCheckBox();
-        bairro = new javax.swing.JComboBox<>();
-        rua = new javax.swing.JComboBox<>();
-        ruaCheckBox = new javax.swing.JCheckBox();
+        bairro = new javax.swing.JTextField();
+        rua = new javax.swing.JTextField();
+        area = new javax.swing.JTextField();
         data = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
         data1 = new com.toedter.calendar.JDateChooser();
         data2 = new com.toedter.calendar.JDateChooser();
         animal = new javax.swing.JPanel();
-        jLabel23 = new javax.swing.JLabel();
         especie = new javax.swing.JTextField();
+        castrado = new javax.swing.JCheckBox();
+        masc = new javax.swing.JCheckBox();
+        fem = new javax.swing.JCheckBox();
+        idade = new javax.swing.JTextField();
         questionario = new javax.swing.JPanel();
         cisterna = new javax.swing.JCheckBox();
         cxdagua = new javax.swing.JCheckBox();
@@ -1295,9 +1297,6 @@ public class Interface extends javax.swing.JFrame {
             }
         });
         jScrollPane5.setViewportView(jTableAnimais);
-        if (jTableAnimais.getColumnModel().getColumnCount() > 0) {
-            jTableAnimais.getColumnModel().getColumn(1).setCellEditor(null);
-        }
 
         jButton7.setText("Adicionar");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
@@ -1427,6 +1426,11 @@ public class Interface extends javax.swing.JFrame {
         jButton3.setText("Excluir");
 
         jButton4.setText("Salvar edição");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         numQuestionarios.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         numQuestionarios.setForeground(new java.awt.Color(51, 51, 51));
@@ -1568,63 +1572,43 @@ public class Interface extends javax.swing.JFrame {
         numero.setForeground(new java.awt.Color(102, 102, 102));
         numero.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Número", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(102, 102, 102))); // NOI18N
 
-        bairroCheckBox.setText("Bairro");
-        bairroCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bairroCheckBoxActionPerformed(evt);
-            }
-        });
+        bairro.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.background"));
+        bairro.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        bairro.setForeground(new java.awt.Color(102, 102, 102));
+        bairro.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Bairro", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(102, 102, 102))); // NOI18N
 
-        bairro.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                bairroItemStateChanged(evt);
-            }
-        });
+        rua.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.background"));
+        rua.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        rua.setForeground(new java.awt.Color(102, 102, 102));
+        rua.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Rua", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(102, 102, 102))); // NOI18N
 
-        rua.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                ruaItemStateChanged(evt);
-            }
-        });
-
-        ruaCheckBox.setText("Rua");
-        ruaCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ruaCheckBoxActionPerformed(evt);
-            }
-        });
+        area.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.background"));
+        area.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        area.setForeground(new java.awt.Color(102, 102, 102));
+        area.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Área", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(102, 102, 102))); // NOI18N
 
         javax.swing.GroupLayout enderecoLayout = new javax.swing.GroupLayout(endereco);
         endereco.setLayout(enderecoLayout);
         enderecoLayout.setHorizontalGroup(
             enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, enderecoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(bairroCheckBox)
+                .addComponent(bairro, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bairro, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(ruaCheckBox)
+                .addComponent(rua, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rua, 0, 192, Short.MAX_VALUE)
+                .addComponent(numero, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(numero, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(area, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         enderecoLayout.setVerticalGroup(
             enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, enderecoLayout.createSequentialGroup()
-                .addComponent(numero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(numero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bairro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(area, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, enderecoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(ruaCheckBox)
-                        .addComponent(rua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(enderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(bairroCheckBox)
-                        .addComponent(bairro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
         );
 
         pesquisa.add(endereco, "card2");
@@ -1663,32 +1647,52 @@ public class Interface extends javax.swing.JFrame {
 
         pesquisa.add(data, "card4");
 
-        jLabel23.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel23.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel23.setText("Espécie do animal:");
-
+        especie.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.background"));
         especie.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         especie.setForeground(new java.awt.Color(102, 102, 102));
+        especie.setBorder(javax.swing.BorderFactory.createTitledBorder("Espécie"));
+
+        castrado.setText("Castrado");
+
+        masc.setText("Masculino");
+
+        fem.setText("Feminino");
+
+        idade.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.background"));
+        idade.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        idade.setForeground(new java.awt.Color(102, 102, 102));
+        idade.setBorder(javax.swing.BorderFactory.createTitledBorder("Idade"));
 
         javax.swing.GroupLayout animalLayout = new javax.swing.GroupLayout(animal);
         animal.setLayout(animalLayout);
         animalLayout.setHorizontalGroup(
             animalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(animalLayout.createSequentialGroup()
-                .addGap(131, 131, 131)
-                .addComponent(jLabel23)
+                .addComponent(especie, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(castrado)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(especie, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(154, Short.MAX_VALUE))
+                .addComponent(masc)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(fem)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(idade, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         animalLayout.setVerticalGroup(
             animalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(animalLayout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, animalLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(animalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel23)
-                    .addComponent(especie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(castrado)
+                    .addComponent(masc)
+                    .addComponent(fem))
+                .addContainerGap())
+            .addGroup(animalLayout.createSequentialGroup()
+                .addGroup(animalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(especie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(idade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pesquisa.add(animal, "card5");
@@ -2280,7 +2284,7 @@ public class Interface extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        pdao.pesquisar(resultadoPesquisa, ruaCheckBox, rua, bairroCheckBox, bairro, numero, data1, data2, especie, cisterna, cxdagua, poco, fossa, animais);
+        pdao.pesquisar(resultadoPesquisa, rua, bairro, numero, data1, data2, especie, cisterna, cxdagua, poco, fossa, animais, area, castrado, masc, fem, idade);
         jLabelNResultados.setText(resultadoPesquisa.getRowCount() + "");
     }//GEN-LAST:event_jButton5ActionPerformed
 
@@ -2288,24 +2292,6 @@ public class Interface extends javax.swing.JFrame {
         // TODO add your handling code here:
         limparFiltros();
     }//GEN-LAST:event_jButton8ActionPerformed
-
-    private void bairroCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bairroCheckBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_bairroCheckBoxActionPerformed
-
-    private void ruaCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ruaCheckBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ruaCheckBoxActionPerformed
-
-    private void ruaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ruaItemStateChanged
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_ruaItemStateChanged
-
-    private void bairroItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_bairroItemStateChanged
-        // TODO add your handling code here:
-        enddao.getRuas(bairro, rua);
-    }//GEN-LAST:event_bairroItemStateChanged
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
@@ -2359,12 +2345,11 @@ public class Interface extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (cadastrarData.getDate() != null) {
             int id = pdao.cadastrarPessoa(cadastrarRuaCampo, cadastrarArea, campoRua, cadastrarComplemento, cadastrarNome, jComboBoxRuas, jComboBoxBairros, cadastrarNumero);
-            
-            if(qdao.cadastrarQuestionario(id, pergunta1, pergunta1p2, pergunta2, pergunta2p1, pergunta2p2, pergunta3, pergunta3p1, pergunta4, pergunta5, cadastrarData, this)&&adao.cadastrarAnimal(id, jTableAnimais, cadastrarData)&&id!=0){
+
+            if (qdao.cadastrarQuestionario(id, pergunta1, pergunta1p2, pergunta2, pergunta2p1, pergunta2p2, pergunta3, pergunta3p1, pergunta4, pergunta5, cadastrarData, this) && adao.cadastrarAnimal(id, jTableAnimais, cadastrarData) && id != 0) {
                 limparCampos();
                 JOptionPane.showMessageDialog(this, "Questionário salvo com sucesso!");
             }
-            
 
         } else {
             JOptionPane.showMessageDialog(this, "Insira uma data válida.");
@@ -2375,6 +2360,27 @@ public class Interface extends javax.swing.JFrame {
         // TODO add your handling code here:
         trocarCampoRua(campoRua);
     }//GEN-LAST:event_jButton11ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        String mensagem = "";
+        if (pdao.editarPessoa(idpessoa, cadastrarRuaCampo, cadastrarArea, campoRua, cadastrarComplemento, cadastrarNome, jComboBoxRuas, jComboBoxBairros, cadastrarNumero)) {
+            mensagem = "pessoa";
+        }
+
+        if (jTableQuestionarios.getSelectedRow() >= 0) {
+            String data = listaQuestionarios.getValueAt(0, jTableQuestionarios.getSelectedRow()) + "";
+            qdao.editarQuestionario(idpessoa, pergunta1, pergunta1p2, pergunta2, pergunta2p1, pergunta2p2, pergunta3, pergunta3p1, pergunta4, pergunta5, cadastrarData, data);
+            adao.editarAnimal(idpessoa, jTableAnimais, cadastrarData, data);
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione um questionário para editar.");
+        }
+
+        listaQuestionarios.setRowCount(0);
+        for (Questionario quests : pdao.getPessoa(idpessoa).getQuestionario()) {
+            listaQuestionarios.addRow(new Object[]{quests.getData()});
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2417,8 +2423,8 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JPanel acoes;
     private javax.swing.JCheckBox animais;
     private javax.swing.JPanel animal;
-    private javax.swing.JComboBox<String> bairro;
-    private javax.swing.JCheckBox bairroCheckBox;
+    private javax.swing.JTextField area;
+    private javax.swing.JTextField bairro;
     private javax.swing.JLabel btnBuscar;
     private javax.swing.JLabel btnCadastrar;
     private javax.swing.JLabel btnExportar;
@@ -2433,6 +2439,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JTextField cadastrarNumero;
     private javax.swing.JTextField cadastrarRuaCampo;
     private javax.swing.JPanel campoRua;
+    private javax.swing.JCheckBox castrado;
     private javax.swing.JCheckBox cisterna;
     private javax.swing.JPanel criar;
     private javax.swing.JCheckBox cxdagua;
@@ -2443,8 +2450,10 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JPanel editar;
     private javax.swing.JPanel endereco;
     private javax.swing.JTextField especie;
+    private javax.swing.JCheckBox fem;
     private javax.swing.JCheckBox fossa;
     private javax.swing.JPanel home;
+    private javax.swing.JTextField idade;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
@@ -2473,7 +2482,6 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel27;
@@ -2526,6 +2534,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JTable jTableAnimais;
     private javax.swing.JTable jTableQuestionarios;
     private javax.swing.JTable jTableResultados;
+    private javax.swing.JCheckBox masc;
     private javax.swing.JLabel numQuestionarios;
     private javax.swing.JTextField numero;
     private javax.swing.JLabel p1p2;
@@ -2550,8 +2559,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JLabel possuemFossa;
     private javax.swing.JLabel possuemPoco;
     private javax.swing.JPanel questionario;
-    private javax.swing.JComboBox<String> rua;
-    private javax.swing.JCheckBox ruaCheckBox;
+    private javax.swing.JTextField rua;
     private javax.swing.JPanel selecaoRua;
     private javax.swing.JPanel selecaoRua1;
     private javax.swing.JLabel totalForms;

@@ -78,28 +78,28 @@ public class AnimalDAO {
         }
     }
 
-    public void editarPessoa(int id, JTable jTableAnimais, JDateChooser cadastrarData) {
+    public void editarAnimal(int id, JTable jTableAnimais, JDateChooser cadastrarData, String data) {
         Connection conexao = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
         conexao = ConnectionFactory.conector();
 
-        String sql = "UPDATE tbl_animais SET (idanimais, especie, sexo, castrado, idade, chip, dataanimais) VALUES (?,?,?,?,?,?,?)";
+        String sql = "UPDATE tbl_animais SET especie=?, sexo=?, castrado=?, idade=?, chip=?, dataanimais=? where idanimais=? and dataanimais=?";
 
         try {
             pst = conexao.prepareStatement(sql);
             for (int i = 0; i < jTableAnimais.getRowCount(); i++) {
-                pst.setInt(1, id);
-                pst.setString(2, jTableAnimais.getValueAt(i, 0) + "");
-                pst.setString(3, jTableAnimais.getValueAt(i, 1) + "");
-                pst.setBoolean(4, (boolean) jTableAnimais.getValueAt(i, 2));
-                pst.setString(5, jTableAnimais.getValueAt(i, 3) + "");
-                pst.setString(6, jTableAnimais.getValueAt(i, 4) + "");
+                pst.setString(1, jTableAnimais.getValueAt(i, 0) + "");
+                pst.setString(2, jTableAnimais.getValueAt(i, 1) + "");
+                pst.setBoolean(3, (boolean) jTableAnimais.getValueAt(i, 2));
+                pst.setString(4, jTableAnimais.getValueAt(i, 3) + "");
+                pst.setString(5, jTableAnimais.getValueAt(i, 4) + "");
                 SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
-                pst.setString(7, dt.format(cadastrarData.getDate()));
+                pst.setString(6, dt.format(cadastrarData.getDate()));
+                pst.setInt(7, id);
+                pst.setString(8, data);
                 pst.executeUpdate();
             }
-            rs.close();
             pst.close();
             conexao.close();
         } catch (SQLException ex) {

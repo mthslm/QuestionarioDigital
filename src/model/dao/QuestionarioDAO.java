@@ -94,13 +94,14 @@ public class QuestionarioDAO {
         } 
     }
     
-    public void editarQuestionario(int id, JCheckBox pergunta1, JCheckBox pergunta1p2, JCheckBox pergunta2, JCheckBox pergunta2p1, JSpinner pergunta2p2, JCheckBox pergunta3, JCheckBox pergunta3p1, JCheckBox pergunta4, JCheckBox pergunta5, JDateChooser cadastrarData) {
+    public void editarQuestionario(int id, JCheckBox pergunta1, JCheckBox pergunta1p2, JCheckBox pergunta2, JCheckBox pergunta2p1, JSpinner pergunta2p2, JCheckBox pergunta3, JCheckBox pergunta3p1, JCheckBox pergunta4, JCheckBox pergunta5, JDateChooser cadastrarData, String data) {
         Connection conexao = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
         conexao = ConnectionFactory.conector();
+        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
 
-        String sql = "UPDATE tbl_perguntas SET (idperguntas,cisterna,cisternaconsumo,cxdagua,tampada,capacidade,pcartesiano,pococonsumo,fseptica,animais,datapergunta) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "UPDATE tbl_perguntas SET idperguntas=?,cisterna=?,cisternaconsumo=?,cxdagua=?,tampada=?,capacidade=?,pcartesiano=?,pococonsumo=?,fseptica=?,animais=?,datapergunta='"+dt.format(cadastrarData.getDate())+"' where idperguntas="+id+" and datapergunta = ?";
 
         try {
             pst = conexao.prepareStatement(sql);
@@ -114,10 +115,8 @@ public class QuestionarioDAO {
             pst.setBoolean(8, pergunta3p1.isSelected());
             pst.setBoolean(9, pergunta4.isSelected());
             pst.setBoolean(10, pergunta5.isSelected());
-            SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
-            pst.setString(11, dt.format(cadastrarData.getDate()));
+            pst.setString(11, data);
             pst.executeUpdate();
-            rs.close();
             pst.close();
             conexao.close();
         } catch (SQLException ex) {

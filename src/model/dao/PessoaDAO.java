@@ -62,26 +62,26 @@ public class PessoaDAO {
 
         String condicao = "";
 
-        if(castrado.isSelected()){
+        if (castrado.isSelected()) {
             condicao = condicao + " and castrado = 1";
         }
-        
-        if(masc.isSelected()){
+
+        if (masc.isSelected()) {
             condicao = condicao + " and sexo = 'Masculino'";
         }
-        
-        if(fem.isSelected()){
+
+        if (fem.isSelected()) {
             condicao = condicao + " and sexo = 'Feminino'";
         }
-        
+
         if (!idade.getText().equals("")) {
             condicao = condicao + " and idade = '" + idade.getText() + "'";
         }
-        
+
         if (!area.getText().equals("")) {
             condicao = condicao + " and area like " + "'%" + area.getText() + "%'";
         }
-        
+
         if (!rua.getText().equals("")) {
             condicao = condicao + " and rua like " + "'%" + rua.getText() + "%'";
         }
@@ -116,7 +116,7 @@ public class PessoaDAO {
 
         String sql = "SELECT nome, rua, numero, bairro, Qtd, idpessoas\n"
                 + "FROM tbl_pessoas\n"
-                + "INNER JOIN (select *, count(idperguntas) as Qtd from tbl_perguntas group by idperguntas) as perguntas\n"
+                + "LEFT JOIN (select *, count(idperguntas) as Qtd from tbl_perguntas group by idperguntas) as perguntas\n"
                 + "on idpessoas = idperguntas\n"
                 + "LEFT JOIN tbl_animais\n"
                 + "ON idpessoas = idanimais\n"
@@ -198,15 +198,43 @@ public class PessoaDAO {
         return id;
     }
 
-    public boolean editarPessoa(int id,JTextField cadastrarRuaCampo, JComboBox cadastrarArea, JPanel campoRua, JTextField cadastrarComplemento, JTextField nome, JComboBox rua, JComboBox bairro, JTextField numero) {
+    public boolean editarPessoa(int id, JTextField cadastrarRuaCampo, JComboBox cadastrarArea, JPanel campoRua, JTextField cadastrarComplemento, JTextField nome, JComboBox rua, JComboBox bairro, JTextField numero) {
         Connection conexao = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
         conexao = ConnectionFactory.conector();
+        int idold = 0;
 
-        String sql = "UPDATE tbl_pessoas SET nome=?,rua=?,bairro=?,numero=?, complemento=?, area=? where idpessoas = "+id;
+        String sql = "UPDATE tbl_pessoas SET nome=?,rua=?,bairro=?,numero=?, complemento=?, area=? where idpessoas = " + id;
+
+        String sql1 = "select idpessoas from tbl_pessoas inner join tbl_perguntas on idpessoas=idperguntas where rua = ? and bairro = ? and numero = ? and complemento = ? and area = ? group by idpessoas";
+
+        String sql2 = "update tbl_perguntas set idperguntas=? where idperguntas=?";
+        String sql3 = "update tbl_animais set idanimais=? where idanimais=?";
 
         try {
+            pst = conexao.prepareStatement(sql1);
+            if (campoRua.isShowing()) {
+                pst.setString(1, cadastrarRuaCampo.getText());
+            } else {
+                pst.setString(1, rua.getSelectedItem().toString());
+            }
+            pst.setString(2, bairro.getSelectedItem().toString());
+            pst.setString(3, numero.getText());
+            pst.setString(4, cadastrarComplemento.getText());
+            pst.setString(5, cadastrarArea.getSelectedItem().toString());
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                if (rs.getInt(1) != id) {
+                    idold = rs.getInt(1);
+                }
+            }
+
+            rs.close();
+            pst.close();
+            // fim verificação se há alguma pessoa com o msm endereço
+
             pst = conexao.prepareStatement(sql);
             pst.setString(1, nome.getText());
             if (campoRua.isShowing()) {
@@ -219,6 +247,54 @@ public class PessoaDAO {
             pst.setString(5, cadastrarComplemento.getText());
             pst.setInt(6, Integer.parseInt(cadastrarArea.getSelectedItem().toString()));
             pst.executeUpdate();
+            pst.close();
+            // fim edição
+
+            if (idold != 0) {
+                pst = conexao.prepareStatement(sql2);
+                pst.setInt(1, id);
+                pst.setInt(2, idold);
+                pst.executeUpdate();
+                pst = conexao.prepareStatement(sql3);
+                pst.setInt(1, id);
+                pst.setInt(2, idold);
+                pst.executeUpdate();
+            }
+
+            //fim update no id
+
+            pst.close();
+            conexao.close();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(PessoaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+    
+    public boolean deletarPessoa(int id){
+        Connection conexao = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        conexao = ConnectionFactory.conector();
+        
+        String sql = "delete from tbl_pessoas where idpessoas=?";
+        String sql1= "delete from tbl_perguntas where idperguntas=?";
+        String sql2 = "delete from tbl_animais where idanimais=?";
+        
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setInt(1, id);
+            pst.executeUpdate();
+            
+            pst = conexao.prepareStatement(sql1);
+            pst.setInt(1, id);
+            pst.executeUpdate();
+            
+            pst = conexao.prepareStatement(sql2);
+            pst.setInt(1, id);
+            pst.executeUpdate();
+            
             pst.close();
             conexao.close();
             return true;

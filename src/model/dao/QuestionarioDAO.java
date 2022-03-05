@@ -94,7 +94,7 @@ public class QuestionarioDAO {
         } 
     }
     
-    public void editarQuestionario(int id, JCheckBox pergunta1, JCheckBox pergunta1p2, JCheckBox pergunta2, JCheckBox pergunta2p1, JSpinner pergunta2p2, JCheckBox pergunta3, JCheckBox pergunta3p1, JCheckBox pergunta4, JCheckBox pergunta5, JDateChooser cadastrarData, String data) {
+    public boolean editarQuestionario(int id, JCheckBox pergunta1, JCheckBox pergunta1p2, JCheckBox pergunta2, JCheckBox pergunta2p1, JSpinner pergunta2p2, JCheckBox pergunta3, JCheckBox pergunta3p1, JCheckBox pergunta4, JCheckBox pergunta5, JDateChooser cadastrarData, String data, Component componente) {
         Connection conexao = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
@@ -119,8 +119,46 @@ public class QuestionarioDAO {
             pst.executeUpdate();
             pst.close();
             conexao.close();
+            return true;
         } catch (SQLException ex) {
-            Logger.getLogger(PessoaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.toString().contains("java.sql.SQLIntegrityConstraintViolationException")){
+                JOptionPane.showMessageDialog(componente, "Já existe um formulário com esse endereço para esta mesma data, é possível editá-lo na aba respectiva.");
+                return false;
+            } else {
+                JOptionPane.showMessageDialog(componente, "Falha na conexão com o banco de dados, tente novamente.");
+                return false;
+            }
+        }
+    }
+    
+    public boolean deletarQuestionario(int id, JDateChooser cadastrarData){
+        Connection conexao = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        conexao = ConnectionFactory.conector();
+        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+        
+        String sql= "delete from tbl_perguntas where idperguntas=? and datapergunta=?";
+        String sql1 = "delete from tbl_animais where idanimais=? and dataanimais=?";
+        
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setInt(1, id);
+            pst.setString(2, dt.format(cadastrarData.getDate()));
+            pst.executeUpdate();
+            
+            pst = conexao.prepareStatement(sql);
+            pst.setInt(1, id);
+            pst.setString(2, dt.format(cadastrarData.getDate()));
+            pst.executeUpdate();
+            
+            pst.close();
+            conexao.close();
+            
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(QuestionarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
     }
 }

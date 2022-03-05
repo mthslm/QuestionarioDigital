@@ -12,20 +12,29 @@ import java.util.Date;
  * @author Matheus
  */
 public class Animal {
-    private String especie, sexo, chip;
-    private int idade;
+    private String especie, sexo, chip, idade;
+    private int  id;
     private Date data;
     private boolean castrado;
 
-    public Animal(String especie, String sexo, String chip, int idade, Date data, boolean castrado) {
+    public Animal(String especie, String sexo, String chip, String idade, Date data, boolean castrado, int id) {
         this.especie = especie;
         this.sexo = sexo;
         this.chip = chip;
         this.idade = idade;
         this.data = data;
         this.castrado = castrado;
+        this.id = id;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public String getEspecie() {
         return especie;
     }
@@ -50,11 +59,11 @@ public class Animal {
         this.chip = chip;
     }
 
-    public int getIdade() {
+    public String getIdade() {
         return idade;
     }
 
-    public void setIdade(int idade) {
+    public void setIdade(String idade) {
         this.idade = idade;
     }
 
